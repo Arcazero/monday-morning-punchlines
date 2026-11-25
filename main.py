@@ -38,6 +38,12 @@ def main():
     out_path = os.path.join(out_dir, "entry.txt")
     with open(out_path, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(joke + "\n")
+    # Read the entry back and prove it is exactly the joke we validated:
+    # a silent truncation or encoding slip must fail loudly, not ship.
+    with open(out_path, encoding="utf-8") as handle:
+        written = handle.read()
+    if written != joke + "\n":
+        raise ValueError(f"{out_path} does not match the validated joke")
     print(f"wrote {len(joke)}-character joke to {out_path}")
     print(joke)
 
